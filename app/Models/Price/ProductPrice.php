@@ -2,23 +2,24 @@
 
 namespace App\Models\Price;
 
-use App\Models\Component;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ComponentPrice extends Model
+class ProductPrice extends Model
 {
-    protected $table = 'component_prices';
+    protected $table = 'product_prices';
 
     protected $fillable = [
-        'component_id',
+        'product_id',
         'price',
+        'cost',
         'currency',
         'notes',
     ];
 
-    public function component(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Component::class);
+        return $this->belongsTo(Product::class);
     }
 }
