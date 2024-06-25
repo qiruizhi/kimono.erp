@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\ComponentType;
 use App\Enums\InventoryStatus;
-use App\Filament\Resources\ComponentResource\Pages;
-use App\Filament\Resources\ComponentResource\RelationManagers;
-use App\Models\Component;
-use App\Traits\MakeSupplierForm;
+use App\Enums\ProductCategory;
+use App\Filament\Resources\ProductResource\Pages;
+use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Product;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
@@ -20,30 +19,30 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class ComponentResource extends Resource
+class ProductResource extends Resource
 {
-    protected static ?string $model = Component::class;
+    protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function getNavigationGroup(): ?string
     {
-        return (__('Operations'));
+        return __('Operations');
     }
 
     public static function getNavigationLabel(): string
     {
-        return (__('Components'));
+        return __('Products');
     }
 
     public static function getModelLabel(): string
     {
-        return __('Component');
+        return __('Product');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('Components');
+        return __('Products');
     }
 
     public static function form(Form $form): Form
@@ -55,11 +54,11 @@ class ComponentResource extends Resource
                         Grid::make()
                             ->schema([
                                 TextInput::make('name')
-                                    ->label(__('Component name'))
+                                    ->label(__('Product name'))
                                     ->required(),
 
                                 TextInput::make('code')
-                                    ->label(__('Component code')),
+                                    ->label(__('Barcode')),
 
                                 ToggleButtons::make('status')
                                     ->label(__('Status'))
@@ -67,23 +66,15 @@ class ComponentResource extends Resource
                                     ->options(InventoryStatus::class)
                                     ->default(InventoryStatus::Active),
 
-                                MakeSupplierForm::make(),
-
-                                TextInput::make('supplier_product_name')
-                                    ->label(__('Supplier product name')),
-
-                                TextInput::make('supplier_code')
-                                    ->label(__('Supplier code')),
-
-                                Select::make('type')
-                                    ->label(__('Type'))
-                                    ->options(ComponentType::class),
+                                Select::make('category')
+                                    ->label(__('Category'))
+                                    ->options(ProductCategory::class),
 
                                 MarkdownEditor::make('notes')
                                     ->label(__('Notes'))
                                     ->columnSpan('full'),
                             ])
-                            ->columnSpan(['lg' => fn (?Component $record) => $record === null ? 3 : 2]),
+                            ->columnSpan(['lg' => fn (?Product $record) => $record === null ? 3 : 2]),
                     ]),
 
                 Section::make(__('Pricing'))
@@ -103,12 +94,21 @@ class ComponentResource extends Resource
                     ->afterStateUpdated(function ($state, $record) {
                         // This hook will run when the form is being saved
                         // Update or create entries in the productPrices table
-                        $record?->componentPrices()->create([
-                            'component_id' => $record->id,
+                        $record?->productPrices()->create([
+                            'product_id' => $record->id,
                             'price' => $state['price'],
                             'currency' => $state['currency']
                         ]);
                     }),
+
+                Section::make(__('Cost'))
+                    ->schema([
+                        TextInput::make('cost')
+                            ->label(__('Cost'))
+                            ->rules(['regex:/^\d{1,8}(\.\d{0,2})?$/'])
+                            ->numeric(2),
+                    ])
+                    ->hiddenOn('create')
             ]);
     }
 
@@ -117,12 +117,12 @@ class ComponentResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label(__('Component'))
+                    ->label(__('Product'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('code')
-                    ->label(__('Code'))
+                    ->label(__('Barcode'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -133,21 +133,9 @@ class ComponentResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('supplier.name')
-                    ->label(__('Supplier'))
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
-                TextColumn::make('supplier_product_name')
-                    ->label(__('Supplier product name'))
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
-                TextColumn::make('supplier_code')
-                    ->label(__('Supplier SKU'))
-                    ->searchable()
+                TextColumn::make('cost')
+                    ->label(__('Cost'))
+                    ->money()
                     ->sortable()
                     ->toggleable(),
             ])
@@ -156,26 +144,27 @@ class ComponentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ReplicateAction::make(),
             ])
             ->bulkActions([
-                //
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            RelationManagers\ComponentPricesRelationManager::class,
+            RelationManagers\ProductPricesRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListComponents::route('/'),
-            'create' => Pages\CreateComponent::route('/create'),
-            'edit' => Pages\EditComponent::route('/{record}/edit'),
+            'index' => Pages\ListProducts::route('/'),
+            'create' => Pages\CreateProduct::route('/create'),
+            'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }
 }
