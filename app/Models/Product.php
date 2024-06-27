@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property mixed $id
+ * @property mixed $name
+ * @property mixed $price
+ * @method static get()
+ * @method static find($state)
  */
 class Product extends Model
 {
@@ -21,9 +25,11 @@ class Product extends Model
     protected $fillable = [
         'name',
         'code',
+        'category',
         'price',
         'cost',
         'currency',
+        'status',
         'lead_time',
         'notes',
     ];
@@ -36,5 +42,10 @@ class Product extends Model
     public function productPrices(): HasMany
     {
         return $this->hasMany(ProductPrice::class);
+    }
+
+    public function salesOrderProducts(): HasMany
+    {
+        return $this->hasMany(SalesOrderProducts::class);
     }
 }
