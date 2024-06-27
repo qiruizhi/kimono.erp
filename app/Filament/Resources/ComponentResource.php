@@ -7,7 +7,7 @@ use App\Enums\InventoryStatus;
 use App\Filament\Resources\ComponentResource\Pages;
 use App\Filament\Resources\ComponentResource\RelationManagers;
 use App\Models\Component;
-use App\Traits\MakeSupplierForm;
+use App\Traits\CreateSupplierForm;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
@@ -67,7 +67,7 @@ class ComponentResource extends Resource
                                     ->options(InventoryStatus::class)
                                     ->default(InventoryStatus::Active),
 
-                                MakeSupplierForm::make(),
+                                CreateSupplierForm::make(),
 
                                 TextInput::make('supplier_product_name')
                                     ->label(__('Supplier product name')),

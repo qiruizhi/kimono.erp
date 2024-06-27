@@ -22,6 +22,8 @@ class Component extends Model
     protected $fillable = [
         'name',
         'code',
+        'status',
+        'type',
         'price',
         'currency',
         'supplier_product_name',
