@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('shipping_price')->nullable();
             $table->integer('margin')->nullable();
             $table->integer('tax')->nullable();
-            $table->decimal('total_price')->nullable();
+            $table->decimal('total_amount',14)->nullable();
             $table->string('currency')->nullable();
             $table->string('notes')->nullable();
             $table->timestamps();

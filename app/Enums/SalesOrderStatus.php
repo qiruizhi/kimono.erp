@@ -8,10 +8,6 @@ use Filament\Support\Contracts\HasLabel;
 
 enum SalesOrderStatus: string implements HasColor, HasIcon, HasLabel
 {
-    case Cancelled = 'cancelled';
-
-    case Delivered = 'delivered';
-
     case New = 'new';
 
     case Processing = 'processing';
@@ -19,6 +15,10 @@ enum SalesOrderStatus: string implements HasColor, HasIcon, HasLabel
     case Shipped = 'shipped';
 
     case Returned = 'returned';
+
+    case Delivered = 'delivered';
+
+    case Cancelled = 'cancelled';
 
     public function getColor(): string | array | null
     {

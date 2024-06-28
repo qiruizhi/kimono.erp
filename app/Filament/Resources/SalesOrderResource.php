@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\SalesOrderStatus;
 use App\Enums\ShippingMethod;
 use App\Filament\Resources\SalesOrderResource\Pages;
-use App\Filament\Resources\SalesOrderResource\RelationManagers;
+//use App\Filament\Resources\SalesOrderResource\RelationManagers;
 use App\Models\Product;
 use App\Models\SalesOrder;
 use App\Traits\CreateCustomerForm;
@@ -111,7 +111,7 @@ class SalesOrderResource extends Resource
                                         self::updateTotals($get, $set);
                                     }),
 
-                                TextInput::make('total_price')
+                                TextInput::make('total_amount')
                                     ->label(__('Total Price'))
                                     ->readOnly()
                                     ->rules(['regex:/^\d{1,8}(\.\d{0,2})?$/'])
@@ -157,7 +157,7 @@ class SalesOrderResource extends Resource
                     ->label(__('Status'))
                     ->badge(),
 
-                TextColumn::make('total_price')
+                TextColumn::make('total_amount')
                     ->label(__('Price'))
                     ->money()
                     ->summarize([
@@ -209,7 +209,7 @@ class SalesOrderResource extends Resource
     {
         return [
             TextInput::make('number')
-                ->label(__('Sales Order Number'))
+                ->label(__('Order Number'))
                 ->default ('S-' . random_int(100000, 999999))
                 ->disabled()
                 ->dehydrated()
@@ -241,24 +241,24 @@ class SalesOrderResource extends Resource
         ];
     }
 
+    public static function calculateOrderPrice(Get $get, Set $set): void
+    {
+        $requiredQuantity = $get('required_quantity');
+        $unitPrice = $get('unit_price');
+        $productAmount = $requiredQuantity * $unitPrice;
+        $set('product_amount', number_format($productAmount, 2, '.', ''));
+    }
+
     public static function updateTotals(Get $get, Set $set): void
     {
         $selectedProducts = collect($get('salesOrderProducts'))->filter(fn($item) => !empty($item['product_id']) && !empty($item['required_quantity']));
 
-        $prices = Product::find($selectedProducts->pluck('product_id'))->pluck('price', 'id');
-
-        $subtotal = $selectedProducts->reduce(function ($subtotal, $product) use ($prices) {
-            return $subtotal + ($prices[$product['product_id']] * $product['required_quantity']);
+        $subtotal = $selectedProducts->reduce(function ($subtotal, $product) {
+            return $subtotal + ($product['unit_price'] * $product['required_quantity']);
         }, 0);
 
-        // Update the order's subtotal and total directly in the database
-//        $order = SalesOrder::find($get('id')); // Assuming 'id' is the primary key of the order
-//        $order->subtotal = $subtotal;
-//        $order->total_price = $subtotal + [($subtotal * ($get('tax') / 100))];
-//        $order->save();
-
         $set('subtotal', number_format($subtotal, 2, '.', ''));
-        $set('total_price', number_format($subtotal + ($subtotal * ($get('tax') / 100)), 2, '.', ''));
+        $set('total_amount', number_format($subtotal + ($subtotal * ($get('tax') / 100)), 2, '.', ''));
     }
 
     public static function getItemsRepeater(): Repeater
@@ -281,10 +281,10 @@ class SalesOrderResource extends Resource
                     )
                     ->distinct()
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, Set $set) => $set('price', Product::find($state)?->price ?? 0))
+                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Product::find($state)?->price ?? 0))
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan([
-                        'md' => 5,
+                        'md' => 3,
                     ])
                     ->searchable()
                     ->required(),
@@ -293,13 +293,25 @@ class SalesOrderResource extends Resource
                     ->label(__('Required quantity'))
                     ->numeric()
                     ->default(1)
+                    ->reactive()
+                    ->afterStateUpdated(fn($state, Set $set, Get $get) => self::calculateOrderPrice($get, $set))
                     ->columnSpan([
-                        'md' => 3,
+                        'md' => 2,
                     ])
                     ->required(),
 
-                TextInput::make('price')
-                    ->label(__('Price'))
+                TextInput::make('unit_price')
+                    ->label(__('Unit Price'))
+                    ->rules(['regex:/^\d{1,8}(\.\d{0,2})?$/'])
+                    ->numeric(2)
+                    ->prefix('$')
+                    ->columnSpan([
+                        'md' => 2,
+                    ])
+                    ->readOnly(),
+
+                TextInput::make('product_amount')
+                    ->label(__('Amount'))
                     ->rules(['regex:/^\d{1,8}(\.\d{0,2})?$/'])
                     ->numeric(2)
                     ->prefix('$')
