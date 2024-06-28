@@ -5,7 +5,10 @@ namespace App\Filament\Resources;
 use App\Enums\WorkOrderStatus;
 use App\Filament\Resources\WorkOrderResource\Pages;
 //use App\Filament\Resources\WorkOrderResource\RelationManagers;
+use App\Models\Product;
+use App\Models\SalesOrderProducts;
 use App\Models\WorkOrder;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
@@ -14,9 +17,11 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 
 
@@ -48,10 +53,27 @@ class WorkOrderResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $products = Product::get();
+
         return $form
             ->schema([
                 Section::make(__('Details'))
                     ->columns(3)
+                    ->headerActions([
+                        Action::make('createBOM')
+                            ->label('Create BOM')
+                            ->action(function () {
+                                // Define the action here, e.g., navigate to a form
+//                                redirect()->route('work-orders.index');
+                            }),
+
+                        Action::make('createKanban')
+                            ->label('Create Kanban')
+                            ->action(function () {
+                                // Define the action here, e.g., navigate to a form
+//                                redirect()->route('work-orders.index');
+                            }),
+                    ])
                     ->schema([
                         TextInput::make('number')
                             ->label(__('Work Order Number'))
@@ -63,7 +85,21 @@ class WorkOrderResource extends Resource
 
                         Select::make('product_id')
                             ->label(__('Product'))
-                            ->relationship('product', 'name'),
+                            ->relationship('product', 'name')
+                            ->options(
+                                $products->mapWithKeys(function (Product $product) {
+                                    return [$product->id => sprintf('%s ($%s)', $product->name, $product->price)];
+                                })
+                            )
+                            ->distinct()
+                            ->reactive()
+                            ->afterStateUpdated(fn ($state, Set $set) => $set('required_quantity', SalesOrderProducts::find($state)?->required_quantity ?? 0))
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+//                            ->columnSpan([
+//                                'md' => 3,
+//                            ])
+                            ->searchable()
+                            ->required(),
 
                         Select::make('user_id')
                             ->label(__('Assigned To'))
@@ -87,10 +123,11 @@ class WorkOrderResource extends Resource
                     ]),
 
                 Section::make(__('Quantities'))
-                    ->columns(3)
+                    ->columns()
                     ->schema([
-                        Placeholder::make('required_quantity')
-                            ->label(__('Required Quantity')),
+                        TextInput::make('required_quantity')
+                            ->label(__('Required Quantity'))
+                            ->numeric(),
 
                         TextInput::make('produced_quantity')
                             ->label(__('Produced Quantity'))
@@ -111,6 +148,11 @@ class WorkOrderResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('number')
+                    ->label(__('Work Order'))
+                    ->searchable()
+                    ->toggleable(),
+
                 TextColumn::make('user.name')
                     ->label(__('Assigned To'))
                     ->sortable()
@@ -119,16 +161,6 @@ class WorkOrderResource extends Resource
                 TextColumn::make('salesOrder.number')
                     ->label(__('Sales Order'))
                     ->sortable()
-                    ->toggleable(),
-
-                TextColumn::make('product.name')
-                    ->label(__('Product'))
-                    ->sortable()
-                    ->toggleable(),
-
-                TextColumn::make('number')
-                    ->label(__('Work Order'))
-                    ->searchable()
                     ->toggleable(),
 
                 TextColumn::make('status')
@@ -149,6 +181,17 @@ class WorkOrderResource extends Resource
                     ->sortable()
                     ->toggleable(),
 
+                TextColumn::make('product.name')
+                    ->label(__('Product'))
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('required_quantity')
+                    ->label(__('Required'))
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('produced_quantity')
                     ->label(__('Produced'))
                     ->numeric()
@@ -159,13 +202,13 @@ class WorkOrderResource extends Resource
                     ->label(__('Defects'))
                     ->numeric()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('verified_quantity')
                     ->label(__('Verified'))
                     ->numeric()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('notes')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -184,13 +227,13 @@ class WorkOrderResource extends Resource
             ->filters([
                 //
             ])
+            ->actionsPosition(ActionsPosition::BeforeColumns)
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

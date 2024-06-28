@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->integer('required_quantity')->nullable();
             $table->integer('produced_quantity')->nullable();
             $table->integer('defect_quantity')->nullable();
             $table->integer('verified_quantity')->nullable();
