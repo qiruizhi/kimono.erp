@@ -22,7 +22,8 @@ return new class extends Migration
                 ->constrained('products')
                 ->cascadeOnDelete();
             $table->integer('required_quantity')->nullable();
-            $table->decimal('price')->nullable();
+            $table->decimal('unit_price')->nullable();
+            $table->decimal('product_amount',12)->nullable();
             $table->timestamps();
         });
     }

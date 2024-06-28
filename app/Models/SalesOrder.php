@@ -25,7 +25,7 @@ class SalesOrder extends Model
         'shipping_price',
         'margin',
         'tax',
-        'total_price',
+        'total_amount',
         'currency',
         'notes',
     ];
