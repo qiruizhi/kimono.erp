@@ -15,6 +15,7 @@ class WorkOrder extends Model
         'status',
         'start_date',
         'end_date',
+        'required_quantity',
         'produced_quantity',
         'defect_quantity',
         'verified_quantity',

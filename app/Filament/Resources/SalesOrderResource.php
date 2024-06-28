@@ -11,6 +11,7 @@ use App\Models\SalesOrder;
 use App\Traits\CreateCustomerForm;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
@@ -26,6 +27,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Random\RandomException;
 
@@ -66,6 +68,14 @@ class SalesOrderResource extends Resource
                     ->columnSpanFull()
                     ->schema([
                         Section::make(__('Details'))
+                            ->headerActions([
+                                Action::make('createWorkOrder')
+                                    ->label('Create Work Order')
+                                    ->action(function () {
+                                        // Define the action here, e.g., navigate to a form
+                                        redirect()->route('work-orders.create');
+                                    }),
+                            ])
                             ->schema(static::getDetailsFormSchema())
                             ->columns(),
 
@@ -121,7 +131,7 @@ class SalesOrderResource extends Resource
                             ->maxWidth('1/2')
                             ->columns(),
 
-                        Section::make()
+                        Grid::make()
                             ->schema([
                                 Placeholder::make('created_at')
                                     ->label(__('Created at'))
@@ -176,13 +186,13 @@ class SalesOrderResource extends Resource
             ->filters([
                 //
             ])
+            ->actionsPosition(ActionsPosition::BeforeColumns)
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

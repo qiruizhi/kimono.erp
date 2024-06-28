@@ -23,7 +23,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->integer('required_quantity')->nullable();
             $table->decimal('unit_price')->nullable();
-            $table->decimal('product_amount',12)->nullable();
+            $table->decimal('product_amount',14)->nullable();
             $table->timestamps();
         });
     }
