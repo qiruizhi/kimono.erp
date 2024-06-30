@@ -75,6 +75,13 @@ class SalesOrderResource extends Resource
                                         // Define the action here, e.g., navigate to a form
                                         redirect()->route('work-orders.create');
                                     }),
+
+                                Action::make('createInvoice')
+                                    ->label('Create Invoice')
+                                    ->action(function () {
+                                        // Define the action here, e.g., navigate to a form
+//                                        redirect()->route('work-orders.create');
+                                    }),
                             ])
                             ->schema(static::getDetailsFormSchema())
                             ->columns(),
@@ -86,7 +93,7 @@ class SalesOrderResource extends Resource
                                     ->modalDescription(__('All existing items will be removed from the order.'))
                                     ->requiresConfirmation()
                                     ->color('danger')
-                                    ->action(fn (Set $set) => $set('items', [])),
+                                    ->action(fn (Set $set) => $set('salesOrderProducts', [])),
                             ])
                             ->schema([
                                 static::getItemsRepeater()
@@ -102,7 +109,7 @@ class SalesOrderResource extends Resource
                                     ->prefix('$')
                                     ->afterStateHydrated(function (Get $get, Set $set) {
                                         self::updateTotals($get, $set);
-                                }),
+                                    }),
 
                                 TextInput::make('margin')
                                     ->label(__('Margin'))
