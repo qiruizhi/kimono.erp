@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum VolumeUnits: string implements HasLabel
+enum VolumeUnit: string implements HasLabel
 {
     case Milliliters = 'ml';
 

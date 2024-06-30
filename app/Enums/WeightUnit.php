@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum WeightUnits: string implements HasLabel
+enum WeightUnit: string implements HasLabel
 {
     case Milligrams = 'mg';
 

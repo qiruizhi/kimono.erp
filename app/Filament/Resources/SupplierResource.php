@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
-use App\Filament\Resources\SupplierResource\RelationManagers;
+//use App\Filament\Resources\SupplierResource\RelationManagers;
 use App\Models\Supplier;
 use Filament\Forms;
 use Filament\Forms\Components\Placeholder;
@@ -12,9 +12,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SupplierResource extends Resource
 {
@@ -31,7 +30,7 @@ class SupplierResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return __('Supplier');
+        return __('Suppliers');
     }
 
     public static function getModelLabel(): string
@@ -120,13 +119,13 @@ class SupplierResource extends Resource
             ->filters([
                 //
             ])
+            ->actionsPosition(ActionsPosition::BeforeColumns)
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

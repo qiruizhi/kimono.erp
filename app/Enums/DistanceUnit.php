@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum DistanceUnits: string implements HasLabel
+enum DistanceUnit: string implements HasLabel
 {
     case Millimeters = 'mm';
 

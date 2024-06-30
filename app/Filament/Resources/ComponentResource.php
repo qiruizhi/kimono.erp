@@ -18,6 +18,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 
 class ComponentResource extends Resource
@@ -154,9 +155,12 @@ class ComponentResource extends Resource
             ->filters([
                 //
             ])
+            ->actionsPosition(ActionsPosition::BeforeColumns)
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ReplicateAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel(),
+                Tables\Actions\ReplicateAction::make()
+                    ->hiddenLabel(),
             ])
             ->bulkActions([
                 //
