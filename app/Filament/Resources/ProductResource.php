@@ -55,7 +55,7 @@ class ProductResource extends Resource
                         Grid::make()
                             ->schema([
                                 TextInput::make('name')
-                                    ->label(__('Product name'))
+                                    ->label(__('Product Name'))
                                     ->required(),
 
                                 TextInput::make('code')
