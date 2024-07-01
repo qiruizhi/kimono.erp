@@ -22,7 +22,7 @@ enum InventoryStatus: string implements HasColor, HasIcon, HasLabel
             self::Active => __('Active'),
             self::Archived => __('Archived'),
             self::Discontinued => __('Discontinued'),
-            self::OutOfStock => __('Out of stock'),
+            self::OutOfStock => __('Out of Stock'),
         };
     }
 

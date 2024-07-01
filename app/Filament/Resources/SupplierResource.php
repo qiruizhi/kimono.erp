@@ -50,18 +50,18 @@ class SupplierResource extends Resource
                 Forms\Components\Section::make(__('Basic Information'))
                     ->schema([
                         TextInput::make('name')
-                            ->label(__('Supplier name'))
+                            ->label(__('Supplier Name'))
                             ->required(),
 
                         TextInput::make('contact_name')
-                            ->label(__('Contact name')),
+                            ->label(__('Contact Name')),
 
                         TextInput::make('email')
-                            ->label(__('Email address'))
+                            ->label(__('Email Address'))
                             ->email(),
 
                         TextInput::make('phone')
-                            ->label(__('Phone number'))
+                            ->label(__('Phone Number'))
                             ->tel(),
 
                         TextInput::make('website')
@@ -72,12 +72,12 @@ class SupplierResource extends Resource
                             ->label(__('Notes')),
 
                         Placeholder::make('created_at')
-                            ->label(__('Created at'))
+                            ->label(__('Created At'))
                             ->content(fn (Supplier $record): ?string => $record->created_at?->diffForHumans())
                             ->hidden(fn (?Supplier $record) => $record === null),
 
                         Placeholder::make('updated_at')
-                            ->label(__('Updated at'))
+                            ->label(__('Updated At'))
                             ->content(fn (Supplier $record): ?string => $record->updated_at?->diffForHumans())
                             ->hidden(fn (?Supplier $record) => $record === null),
                     ])

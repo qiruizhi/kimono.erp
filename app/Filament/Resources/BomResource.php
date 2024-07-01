@@ -165,13 +165,16 @@ class BomResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('number')
+                    ->label(__('BOM #'))
                     ->searchable(),
 
                 TextColumn::make('product.name')
+                    ->label(__('Product'))
                     ->numeric()
                     ->sortable(),
 
                 TextColumn::make('operating_cost')
+                    ->label(__('Operating Cost'))
                     ->money()
                     ->summarize([
                         Sum::make()
@@ -182,6 +185,7 @@ class BomResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('component_cost')
+                    ->label(__('Component Cost'))
                     ->money()
                     ->summarize([
                         Sum::make()
@@ -192,6 +196,7 @@ class BomResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('gross_cost')
+                    ->label(__('Gross Cost'))
                     ->money()
                     ->summarize([
                         Sum::make()
@@ -202,6 +207,7 @@ class BomResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('margin')
+                    ->label(__('Margin'))
                     ->numeric()
                     ->summarize([
                         Average::make()
@@ -212,6 +218,7 @@ class BomResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('total_cost')
+                    ->label(__('Total Cost'))
                     ->money()
                     ->summarize([
                         Sum::make()
@@ -222,11 +229,13 @@ class BomResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('created_at')
+                    ->label(__('Created At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label(__('Updated At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -267,9 +276,8 @@ class BomResource extends Resource
     {
         return [
             TextInput::make('number')
-                ->label(__('BOM Number'))
+                ->label(__('BOM #'))
                 ->default ('B-' . random_int(100000, 999999))
-//                ->dehydrated()
                 ->disabledOn('edit')
                 ->required()
                 ->maxLength(32)
@@ -282,6 +290,7 @@ class BomResource extends Resource
                 ->preload(),
 
             MarkdownEditor::make('notes')
+                ->label(__('Notes'))
                 ->columnSpanFull(),
         ];
     }
@@ -362,7 +371,7 @@ class BomResource extends Resource
             )
             ->extraItemActions([
                 Action::make('openComponent')
-                    ->label(__('Open component'))
+                    ->label(__('Open Component'))
                     ->icon('heroicon-m-arrow-top-right-on-square')
                     ->url(function (array $arguments, Repeater $component): ?string {
                         $itemData = $component->getRawItemState($arguments['item']);

@@ -307,7 +307,7 @@ class SalesOrderResource extends Resource
                     ->required(),
 
                 TextInput::make('required_quantity')
-                    ->label(__('Required quantity'))
+                    ->label(__('Required Quantity'))
                     ->numeric()
                     ->default(1)
                     ->reactive()
@@ -349,7 +349,7 @@ class SalesOrderResource extends Resource
             )
             ->extraItemActions([
                 Action::make('openProduct')
-                    ->label(__('Open product'))
+                    ->label(__('Open Product'))
                     ->icon('heroicon-m-arrow-top-right-on-square')
                     ->url(function (array $arguments, Repeater $component): ?string {
                         $itemData = $component->getRawItemState($arguments['item']);
