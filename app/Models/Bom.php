@@ -32,7 +32,7 @@ class Bom extends Model
 
     public function bomComponents(): HasMany
     {
-        return $this->hasMany(BomComponents::class);
+        return $this->hasMany(BomComponent::class);
     }
 
     public function bomOperations(): HasMany

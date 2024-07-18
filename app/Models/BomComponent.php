@@ -9,7 +9,7 @@ use App\Enums\WeightUnit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BomComponents extends Model
+class BomComponent extends Model
 {
     protected $table = 'bom_components';
 
