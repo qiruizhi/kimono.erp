@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static find(\Illuminate\Support\Collection $pluck)
  */
-class SalesOrderProducts extends Model
+class SalesOrderProduct extends Model
 {
     protected $table = 'sales_order_products';
 

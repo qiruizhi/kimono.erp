@@ -1,4 +1,4 @@
-READY GO
+FAN
 {{--<img--}}
 {{--    src=""--}}
 {{--    alt="Logo Ready-Go"--}}
