@@ -6,12 +6,11 @@ use App\Enums\WorkOrderStatus;
 use App\Filament\Resources\WorkOrderResource\Pages;
 //use App\Filament\Resources\WorkOrderResource\RelationManagers;
 use App\Models\Product;
-use App\Models\SalesOrderProducts;
+use App\Models\SalesOrderProduct;
 use App\Models\WorkOrder;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -93,7 +92,7 @@ class WorkOrderResource extends Resource
                             )
                             ->distinct()
                             ->reactive()
-                            ->afterStateUpdated(fn ($state, Set $set) => $set('required_quantity', SalesOrderProducts::find($state)?->required_quantity ?? 0))
+                            ->afterStateUpdated(fn ($state, Set $set) => $set('required_quantity', SalesOrderProduct::find($state)?->required_quantity ?? 0))
                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
 //                            ->columnSpan([
 //                                'md' => 3,

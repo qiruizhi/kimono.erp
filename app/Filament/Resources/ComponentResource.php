@@ -18,6 +18,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 
 class ComponentResource extends Resource
@@ -55,11 +56,11 @@ class ComponentResource extends Resource
                         Grid::make()
                             ->schema([
                                 TextInput::make('name')
-                                    ->label(__('Component name'))
+                                    ->label(__('Component Name'))
                                     ->required(),
 
                                 TextInput::make('code')
-                                    ->label(__('Component code')),
+                                    ->label(__('Component Code')),
 
                                 ToggleButtons::make('status')
                                     ->label(__('Status'))
@@ -70,10 +71,10 @@ class ComponentResource extends Resource
                                 CreateSupplierForm::make(),
 
                                 TextInput::make('supplier_product_name')
-                                    ->label(__('Supplier product name')),
+                                    ->label(__('Supplier Product Name')),
 
                                 TextInput::make('supplier_code')
-                                    ->label(__('Supplier code')),
+                                    ->label(__('Supplier Code')),
 
                                 Select::make('type')
                                     ->label(__('Type'))
@@ -140,7 +141,7 @@ class ComponentResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('supplier_product_name')
-                    ->label(__('Supplier product name'))
+                    ->label(__('Supplier Product Name'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -154,9 +155,12 @@ class ComponentResource extends Resource
             ->filters([
                 //
             ])
+            ->actionsPosition(ActionsPosition::BeforeColumns)
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ReplicateAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel(),
+                Tables\Actions\ReplicateAction::make()
+                    ->hiddenLabel(),
             ])
             ->bulkActions([
                 //

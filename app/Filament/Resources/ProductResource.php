@@ -17,6 +17,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 
 class ProductResource extends Resource
@@ -54,7 +55,7 @@ class ProductResource extends Resource
                         Grid::make()
                             ->schema([
                                 TextInput::make('name')
-                                    ->label(__('Product name'))
+                                    ->label(__('Product Name'))
                                     ->required(),
 
                                 TextInput::make('code')
@@ -142,13 +143,13 @@ class ProductResource extends Resource
             ->filters([
                 //
             ])
+            ->actionsPosition(ActionsPosition::BeforeColumns)
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

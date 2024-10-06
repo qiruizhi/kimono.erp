@@ -75,6 +75,13 @@ class SalesOrderResource extends Resource
                                         // Define the action here, e.g., navigate to a form
                                         redirect()->route('work-orders.create');
                                     }),
+
+                                Action::make('createInvoice')
+                                    ->label('Create Invoice')
+                                    ->action(function () {
+                                        // Define the action here, e.g., navigate to a form
+//                                        redirect()->route('work-orders.create');
+                                    }),
                             ])
                             ->schema(static::getDetailsFormSchema())
                             ->columns(),
@@ -86,7 +93,7 @@ class SalesOrderResource extends Resource
                                     ->modalDescription(__('All existing items will be removed from the order.'))
                                     ->requiresConfirmation()
                                     ->color('danger')
-                                    ->action(fn (Set $set) => $set('items', [])),
+                                    ->action(fn (Set $set) => $set('salesOrderProducts', [])),
                             ])
                             ->schema([
                                 static::getItemsRepeater()
@@ -102,7 +109,7 @@ class SalesOrderResource extends Resource
                                     ->prefix('$')
                                     ->afterStateHydrated(function (Get $get, Set $set) {
                                         self::updateTotals($get, $set);
-                                }),
+                                    }),
 
                                 TextInput::make('margin')
                                     ->label(__('Margin'))
@@ -300,7 +307,7 @@ class SalesOrderResource extends Resource
                     ->required(),
 
                 TextInput::make('required_quantity')
-                    ->label(__('Required quantity'))
+                    ->label(__('Required Quantity'))
                     ->numeric()
                     ->default(1)
                     ->reactive()
@@ -342,7 +349,7 @@ class SalesOrderResource extends Resource
             )
             ->extraItemActions([
                 Action::make('openProduct')
-                    ->label(__('Open product'))
+                    ->label(__('Open Product'))
                     ->icon('heroicon-m-arrow-top-right-on-square')
                     ->url(function (array $arguments, Repeater $component): ?string {
                         $itemData = $component->getRawItemState($arguments['item']);

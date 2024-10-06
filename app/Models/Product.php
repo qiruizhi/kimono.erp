@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Enums\InventoryStatus;
 use App\Enums\ProductCategory;
 use App\Models\Price\ProductPrice;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+//use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property mixed $id
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Product extends Model
 {
-    use HasFactory;
+//    use HasFactory;
 
     protected $table = 'products';
 
@@ -46,6 +47,6 @@ class Product extends Model
 
     public function salesOrderProducts(): HasMany
     {
-        return $this->hasMany(SalesOrderProducts::class);
+        return $this->hasMany(SalesOrderProduct::class);
     }
 }

@@ -1,11 +1,12 @@
 {
-    "name": "laravel/laravel",
+    "name": "kimono/erp-system",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "The skeleton application for the Kimono ERP system.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bezhansalleh/filament-language-switch": "^3.1",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9"
