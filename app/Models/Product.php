@@ -8,6 +8,7 @@ use App\Models\Price\ProductPrice;
 //use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property mixed $id
@@ -46,6 +47,6 @@ class Product extends Model
 
     public function salesOrderProducts(): HasMany
     {
-        return $this->hasMany(SalesOrderProducts::class);
+        return $this->hasMany(SalesOrderProduct::class);
     }
 }

@@ -1,4 +1,4 @@
-READY GO
+KIMONO
 {{--<img--}}
 {{--    src=""--}}
 {{--    alt="Logo Ready-Go"--}}

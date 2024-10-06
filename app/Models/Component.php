@@ -9,6 +9,7 @@ use App\Models\Price\ComponentPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property mixed $id
@@ -52,6 +53,6 @@ class Component extends Model
 
     public function bomComponents(): HasMany
     {
-        return $this->hasMany(BomComponents::class);
+        return $this->hasMany(BomComponent::class);
     }
 }
