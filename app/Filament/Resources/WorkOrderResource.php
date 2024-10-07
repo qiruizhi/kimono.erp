@@ -60,14 +60,14 @@ class WorkOrderResource extends Resource
                     ->columns(3)
                     ->headerActions([
                         Action::make('createBOM')
-                            ->label('Create BOM')
+                            ->label(__('Create BOM'))
                             ->action(function () {
                                 // Define the action here, e.g., navigate to a form
 //                                redirect()->route('work-orders.index');
                             }),
 
                         Action::make('createKanban')
-                            ->label('Create Kanban')
+                            ->label(__('Create Kanban'))
                             ->action(function () {
                                 // Define the action here, e.g., navigate to a form
 //                                redirect()->route('work-orders.index');

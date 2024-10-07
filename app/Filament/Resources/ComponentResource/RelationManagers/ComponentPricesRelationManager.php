@@ -12,18 +12,24 @@ use Filament\Tables\Columns\Summarizers\Average;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ComponentPricesRelationManager extends RelationManager
 {
     protected static string $relationship = 'componentPrices';
 
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Component Prices');
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Placeholder::make('created_at')
-                    ->label(__('Effective date'))
+                    ->label(__('Effective Date'))
                     ->content(fn (ComponentPrice $record): ?string => $record->created_at?->format('l, F j, Y g:i A'))
                     ->disabled()
                     ->columnSpanFull(),
@@ -45,14 +51,14 @@ class ComponentPricesRelationManager extends RelationManager
             ->recordTitleAttribute('created_at')
             ->columns([
                 TextColumn::make('created_at')
-                    ->label(__('Effective date'))
+                    ->label(__('Effective Date'))
                     ->date()
                     ->sortable(),
 
                 TextColumn::make('price')
                     ->label(__('Price'))
-                    ->summarize(Average::make()
-                        ->label(__('Average price'))
+                    ->summarize(Average::make(__('Summary'))
+                        ->label(__('Average Price'))
                         ->money())
                     ->money()
                     ->sortable(),
