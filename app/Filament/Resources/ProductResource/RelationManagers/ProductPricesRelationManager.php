@@ -11,17 +11,23 @@ use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Average;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class ProductPricesRelationManager extends RelationManager
 {
     protected static string $relationship = 'productPrices';
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Product Prices');
+    }
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Placeholder::make('created_at')
-                    ->label(__('Effective date'))
+                    ->label(__('Effective Date'))
                     ->content(fn (ProductPrice $record): ?string => $record->created_at?->format('l, F j, Y g:i A'))
                     ->disabled()
                     ->columnSpanFull(),

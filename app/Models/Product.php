@@ -33,6 +33,18 @@ class Product extends Model
         'status',
         'lead_time',
         'notes',
+        'weight_value',
+        'weight_unit',
+        'height_value',
+        'height_unit',
+        'depth_value',
+        'depth_unit',
+        'width_value',
+        'width_unit',
+        'volume_value',
+        'volume_unit',
+        'primary_material',
+        'secondary_material',
     ];
 
     protected $casts = [
