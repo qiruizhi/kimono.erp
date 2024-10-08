@@ -78,6 +78,8 @@ class ProductResource extends Resource
                             ->columnSpan(['lg' => fn (?Product $record) => $record === null ? 3 : 2]),
                     ]),
 
+
+
                 Section::make(__('Pricing'))
                     ->schema([
                         TextInput::make('price')
@@ -109,7 +111,62 @@ class ProductResource extends Resource
                             ->rules(['regex:/^\d{1,8}(\.\d{0,2})?$/'])
                             ->numeric(2),
                     ])
-                    ->hiddenOn('create')
+                    ->hiddenOn('create'),
+
+                Section::make(__('Specifications'))
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('depth_value')
+                                    ->label(__('Length value'))
+                                    ->numeric(3),
+
+                                TextInput::make('width_value')
+                                    ->label(__('Width value'))
+                                    ->placeholder(__(''))
+                                    ->numeric(3),
+
+                                TextInput::make('height_value')
+                                    ->label(__('Height value'))
+                                    ->numeric(3),
+
+                                Select::make('depth_unit')
+                                    ->label(__('Length unit'))
+                                    ->options(static::distanceUnitOptions()),
+
+                                Select::make('width_unit')
+                                    ->label(__('Width unit'))
+                                    ->options(static::distanceUnitOptions()),
+
+                                Select::make('height_unit')
+                                    ->label(__('Height unit'))
+                                    ->options(static::distanceUnitOptions()),
+
+                                TextInput::make('weight_value')
+                                    ->label(__('Weight value'))
+                                    ->numeric(3),
+
+                                TextInput::make('volume_value')
+                                    ->label(__('Volume value'))
+                                    ->numeric(),
+
+                                TextInput::make('primary_material')
+                                    ->label(__('Primary material')),
+
+                                Select::make('weight_unit')
+                                    ->label(__('Weight unit'))
+                                    ->options(static::weightUnitOptions()),
+
+                                Select::make('volume_unit')
+                                    ->label(__('Volume unit'))
+                                    ->options(static::volumeUnitOptions()),
+
+                                TextInput::make('secondary_material')
+                                    ->label(__('Secondary material')),
+                            ])
+                    ])
+                    ->collapsible()
+                    ->columns(),
             ]);
     }
 
@@ -151,6 +208,57 @@ class ProductResource extends Resource
             ->bulkActions([
                 //
             ]);
+    }
+
+    public static function distanceUnitOptions(): array
+    {
+        return [
+            __('Metric') => [
+                'mm' => __('Millimeter (mm)'),
+                'cm' => __('Centimeter (cm)'),
+            ],
+            'Imperial' => [
+                'in' => __('Inch / Inches (in)'),
+                'ft' => 'Foot / Feet (ft)',
+                'yd' => 'Yard (yd)',
+            ],
+        ];
+    }
+
+    public static function weightUnitOptions(): array
+    {
+        return [
+            'Metric' => [
+                'mg' => 'Milligram (mg)',
+                'gm' => 'Gram (g)',
+                'kg' => 'Kilogram (kg)',
+                'mt' => 'Tonne (t)',
+            ],
+            'Imperial' => [
+                'in' => 'Inch / Inches (in)',
+                'ft' => 'Foot / Feet (ft)',
+                'yd' => 'Yard (yd)',
+            ],
+        ];
+    }
+
+    public static function volumeUnitOptions(): array
+    {
+        return [
+            'Metric' => [
+                'ml' => 'Milliliter (mL)',
+                'l' => 'Liter (L)',
+            ],
+            'Imperial' => [
+                'cu_in' => 'Cubic Inch / Cubic Inches (in)',
+                'cu_ft' => 'Cubic Foot / Cubic Feet (ft)',
+                'cu_yd' => 'Cubic Yard (yd)',
+                'fl_oz' => 'Fluid ounce (fl oz)',
+                'pt' => 'Pint (pt)',
+                'qt' => 'Quart (qt)',
+                'gal' => 'Gallon (gal)',
+            ],
+        ];
     }
 
     public static function getRelations(): array
