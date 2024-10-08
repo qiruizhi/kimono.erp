@@ -49,14 +49,14 @@ class ProductPricesRelationManager extends RelationManager
             ->recordTitleAttribute('created_at')
             ->columns([
                 TextColumn::make('created_at')
-                    ->label(__('Effective date'))
+                    ->label(__('Effective Date'))
                     ->date()
                     ->sortable(),
 
                 TextColumn::make('price')
                     ->label(__('Price'))
                     ->summarize(Average::make()
-                        ->label(__('Average price'))
+                        ->label(__('Average Price'))
                         ->money())
                     ->money()
                     ->sortable(),
